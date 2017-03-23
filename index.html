@@ -1,153 +1,164 @@
 <!DOCTYPE html>
-<meta charset="UTF-8">
-<style>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
 
-.node circle {
-  fill: #fff;
-  stroke: steelblue;
-  stroke-width: 3px;
-}
+    <title>Tree Example</title>
 
-.node text {
-  font: 12px sans-serif;
-}
+    <style>
 
-.link {
-  fill: none;
-  stroke: #ccc;
-  stroke-width: 2px;
-}
+	.node {
+		cursor: pointer;
+	}
 
-</style>
+	.node circle {
+	  fill: #fff;
+	  stroke: steelblue;
+	  stroke-width: 3px;
+	}
 
-<body>
+	.node text {
+	  font: 12px sans-serif;
+	}
+
+	.link {
+	  fill: none;
+	  stroke: #ccc;
+	  stroke-width: 2px;
+	}
+
+    </style>
+
+  </head>
+
+  <body>
 
 <!-- load the d3.js library -->
-<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+
 <script>
 
-var treeData =
+var treeData = [
   {
-    "name": "Governo de Minas",
+    "NickName": "Governo de Minas",
     "parent": "null",
-    "value": 10,
     "type": "black",
     "level": "red",
     "children": [
       {
-        "name": "Secretaria de Estado de Trabalho e Desenvolvimento Social (SEDESE)",
+        "NickName": "Secretaria de Estado de Trabalho e Desenvolvimento Social (SEDESE)",
         "parent": "Governo de Minas",
         "value": 15,
         "type": "secretaria",
         "level": "red",
         "children": [
-          { "name": "Assessoria Juridica" },
-          { "name": "Assessoria de Gestão de Convênios e Parcelas" },
-          { "name": "Assessoria de Planejamento" },
-          { "name": "Assessoria de Comunicação Social" },
-          { "name": "Assessoria de Integração Constitucional" },
-          { "name": "Assessoria de Tomada de Contas" },
-          { "name": "Unidade Setorial de Controle Interno" },
-          { "name": "Gabinete" },
+          { "NickName": "Assessoria Juridica" },
+          { "NickName": "Assessoria de Gestão de Convênios e Parcelas" },
+          { "NickName": "Assessoria de Planejamento" },
+          { "NickName": "Assessoria de Comunicação Social" },
+          { "NickName": "Assessoria de Integração Constitucional" },
+          { "NickName": "Assessoria de Tomada de Contas" },
+          { "NickName": "Unidade Setorial de Controle Interno" },
+          { "NickName": "Gabinete" },
 
           {
-            "name": "Subsecretaria de Trabalho e Emprego",
+            "NickName": "Subsecretaria de Trabalho e Emprego",
             "tipe": "superint",
             "children": [
               {
-                "name": "Superintendência de Gestão e Fomento ao Emprego",
+                "NickName": "Superintendência de Gestão e Fomento ao Emprego",
                 "children": [
-                { "name": "Diretoria de Desenvolvimento de Políticas para Inclusão de Emprego"},
-                { "name": "Diretoria de Atendimento ao Trabalhador"},
-                { "name": "Diretoria de Formação Profissional"},
-                { "name": "Diretoria de Gestão da Estrutura do Sistema Nacional de Empregos - SINE"}
+                { "NickName": "Diretoria de Desenvolvimento de Políticas para Inclusão de Emprego"},
+                { "NickName": "Diretoria de Atendimento ao Trabalhador"},
+                { "NickName": "Diretoria de Formação Profissional"},
+                { "NickName": "Diretoria de Gestão da Estrutura do Sistema Nacional de Empregos - SINE"}
                 ]
               },
-              { "name": "Assessoria de Relações Institucionais para o Trabalho" },
-              { "name": "Assessoria de Articulação Interserorial" },
-              { "name": "Assessoria de Gestão do Observatório do Trabalho" },
+              { "NickName": "Assessoria de Relações Institucionais para o Trabalho" },
+              { "NickName": "Assessoria de Articulação Interserorial" },
+              { "NickName": "Assessoria de Gestão do Observatório do Trabalho" },
 
 
               {
-                "name": "Superintendência de Políticas de Empreendedorismo e de Economia Popular Solidária",
+                "NickName": "Superintendência de Políticas de Empreendedorismo e de Economia Popular Solidária",
                 "children":[
-                { "name": "Diretoria de Desenvolvimento e Estruturação da Produção"},
-                { "name": "Diretoria de Educação e Apoio à Autogestão dos Empreendimentos"},
-                { "name": "Diretoria de Comercialização"},
-                { "name": "Diretoria de Apoio à Participação Social"}
+                { "NickName": "Diretoria de Desenvolvimento e Estruturação da Produção"},
+                { "NickName": "Diretoria de Educação e Apoio à Autogestão dos Empreendimentos"},
+                { "NickName": "Diretoria de Comercialização"},
+                { "NickName": "Diretoria de Apoio à Participação Social"}
                 ]
               }
             ]
           },
 
           {
-            "name": "Superintendência de Programas Especiais",
+            "NickName": "Superintendência de Programas Especiais",
             "tipe": "superint",
             "children": [
-              { "name": "Diretoria de Programas para a População de Vilas e Favelas" },
-              { "name": "Diretoria de Programas de Enfrentamento da Pobreza no Campo" },
-              { "name": "Diretoria de Monitoramento e Avaliação de Programas Especiais" },
-              { "name": "Diretoria de Apoio aos Municípios na Promoção do Desenvolvimento Social" }
+              { "NickName": "Diretoria de Programas para a População de Vilas e Favelas" },
+              { "NickName": "Diretoria de Programas de Enfrentamento da Pobreza no Campo" },
+              { "NickName": "Diretoria de Monitoramento e Avaliação de Programas Especiais" },
+              { "NickName": "Diretoria de Apoio aos Municípios na Promoção do Desenvolvimento Social" }
             ]
           },
 
           {
-            "name": "Superintendência de Planejamento Gestão e Finanças",
+            "NickName": "Superintendência de Planejamento Gestão e Finanças",
             "tipe": "superint",
             "children": [
-              { "name": "Diretoria de Acompanhamento e Prestação de Contas" },
-              { "name": "Diretoria de Gestão de Compras e Acompanhamento de Contratos" },
-              { "name": "Diretoria de Logística e Manutenção" },
-              { "name": "Diretoria de Recursos Humanos" },
-              { "name": "Diretoria de Tecnologia da Informação e Comunicação" }
+              { "NickName": "Diretoria de Acompanhamento e Prestação de Contas" },
+              { "NickName": "Diretoria de Gestão de Compras e Acompanhamento de Contratos" },
+              { "NickName": "Diretoria de Logística e Manutenção" },
+              { "NickName": "Diretoria de Recursos Humanos" },
+              { "NickName": "Diretoria de Tecnologia da Informação e Comunicação" }
             ]
           },
 
           {
-            "name": "Superintendência de Interiorização",
+            "NickName": "Superintendência de Interiorização",
             "tipe": "superint",
             "children": [
-              { "name": "Diretorias Regionais" },
-              { "name": "Diretoria de Coordenação de Políticas Públicas Regionais" }
+              { "NickName": "Diretorias Regionais" },
+              { "NickName": "Diretoria de Coordenação de Políticas Públicas Regionais" }
             ]
           },
 
           {
-            "name": "Subsecretaria de Assistencia Social",
+            "NickName": "Subsecretaria de Assistencia Social",
             "children": [
-              { "name": "Assessoria de Articulação da Politica de Assistencia Social"},
+              { "NickName": "Assessoria de Articulação da Politica de Assistencia Social"},
               {
-                "name": "Superintendencia de Capacitação, Monitoramento, controle e Avaliação de Politicas de Assistência Social",
+                "NickName": "Superintendencia de Capacitação, Monitoramento, controle e Avaliação de Politicas de Assistência Social",
                 "children": [
-                  { "name": "Diretoria de Gestão do Trabalho e Educação Permanente do SUAS"},
-                  { "name": "Diretoria de Vigilância Socioassistencial" },
-                  { "name": "Diretoria de Regulação do SUAS" }
+                  { "NickName": "Diretoria de Gestão do Trabalho e Educação Permanente do SUAS"},
+                  { "NickName": "Diretoria de Vigilância Socioassistencial" },
+                  { "NickName": "Diretoria de Regulação do SUAS" }
                 ]
               },
               {
-                "name": "Superintendência de Proteção Social Especial",
+                "NickName": "Superintendência de Proteção Social Especial",
                 "children": [
-                  { "name": "Diretoria de Gestão de Medidas Socioeducativas em Meio Aberto"},
-                  { "name": "Diretoria de Proteção Social de Média Complexidade " },
-                  { "name": "Diretoria de Proteção Social de Alta Complexidade " },
-                  { "name": "Diretoria de Articulação com Sistema de Garantia de Direitos e Integração da Rede Socioassistencial" },
-                  { "name": "Centro de Refeência Especializados de Assistência Social - CREAS Regionais"}
+                  { "NickName": "Diretoria de Gestão de Medidas Socioeducativas em Meio Aberto"},
+                  { "NickName": "Diretoria de Proteção Social de Média Complexidade " },
+                  { "NickName": "Diretoria de Proteção Social de Alta Complexidade " },
+                  { "NickName": "Diretoria de Articulação com Sistema de Garantia de Direitos e Integração da Rede Socioassistencial" },
+                  { "NickName": "Centro de Refeência Especializados de Assistência Social - CREAS Regionais"}
                 ]
               },
               {
-                "name": "Superintendencia do Fundo Estaadual de Assistência Social",
+                "NickName": "Superintendencia do Fundo Estaadual de Assistência Social",
                 "children": [
-                  { "name": "Diretoria de Gestão do FEAS"},
-                  { "name": "Diretoria Análise de contas" }
+                  { "NickName": "Diretoria de Gestão do FEAS"},
+                  { "NickName": "Diretoria Análise de contas" }
                 ]
               },
               {
-                "name": "Superintendencia de Proteção Social Básica e Gestão do Sistema Único de Assistência Social",
+                "NickName": "Superintendencia de Proteção Social Básica e Gestão do Sistema Único de Assistência Social",
                 "children": [
-                  { "name": "Diretoria de Gestão do SUAS"},
-                  { "name": "Diretoria Credenciamento e Apoio às Entidades Socioassistenciais"},
-                  { "name": "Diretoria de Serviços Socioassistenciais"},
-                  { "name": "Diretoria de Benefícios e Transferência de Renda"}
+                  { "NickName": "Diretoria de Gestão do SUAS"},
+                  { "NickName": "Diretoria Credenciamento e Apoio às Entidades Socioassistenciais"},
+                  { "NickName": "Diretoria de Serviços Socioassistenciais"},
+                  { "NickName": "Diretoria de Benefícios e Transferência de Renda"}
                 ]
               }
             ]
@@ -157,323 +168,299 @@ var treeData =
 
 
       {
-        "name": "Secretaria de Estado de Agricultura, Pecuária e Abastecimento",
+        "NickName": "Secretaria de Estado de Agricultura, Pecuária e Abastecimento",
         "type": "secretaria",
         "children": [
-          { "name": "Assessoria Juridica" },
-          { "name": "Assessoria de Gestão de Convênios e Parcelas" },
-          { "name": "Assessoria de Planejamento" },
-          { "name": "Assessoria de Comunicação Social" },
-          { "name": "Assessoria de Integração Constitucional" },
-          { "name": "Assessoria de Tomada de Contas" },
-          { "name": "Unidade Setorial de Controle Interno" },
-          { "name": "Gabinete" }
+          { "NickName": "Assessoria Juridica" },
+          { "NickName": "Assessoria de Gestão de Convênios e Parcelas" },
+          { "NickName": "Assessoria de Planejamento" },
+          { "NickName": "Assessoria de Comunicação Social" },
+          { "NickName": "Assessoria de Integração Constitucional" },
+          { "NickName": "Assessoria de Tomada de Contas" },
+          { "NickName": "Unidade Setorial de Controle Interno" },
+          { "NickName": "Gabinete" }
         ]
       },
 
 
       {
-        "name": "Secretaria de Estado de Educação (SEE)",
+        "NickName": "Secretaria de Estado de Educação (SEE)",
         "children": [
-          { "name": "Assessoria Juridica" },
-          { "name": "Assessoria de Gestão de Convênios e Parcelas" },
-          { "name": "Assessoria de Planejamento" },
-          { "name": "Assessoria de Comunicação Social" },
-          { "name": "Assessoria de Integração Constitucional" },
-          { "name": "Assessoria de Tomada de Contas" },
-          { "name": "Unidade Setorial de Controle Interno" },
-          { "name": "Gabinete" }
+          { "NickName": "Assessoria Juridica" },
+          { "NickName": "Assessoria de Gestão de Convênios e Parcelas" },
+          { "NickName": "Assessoria de Planejamento" },
+          { "NickName": "Assessoria de Comunicação Social" },
+          { "NickName": "Assessoria de Integração Constitucional" },
+          { "NickName": "Assessoria de Tomada de Contas" },
+          { "NickName": "Unidade Setorial de Controle Interno" },
+          { "NickName": "Gabinete" }
         ]
       },
 
 
       {
-        "name": "Secretaria de Estado de Direitos Humanos, Participação Social e Cidadania (SEDPAC)",
+        "NickName": "Secretaria de Estado de Direitos Humanos, Participação Social e Cidadania (SEDPAC)",
         "children": [
-          { "name": "Assessoria Juridica" },
-          { "name": "Assessoria de Gestão de Convênios e Parcelas" },
-          { "name": "Assessoria de Planejamento" },
-          { "name": "Assessoria de Comunicação Social" },
-          { "name": "Assessoria de Integração Constitucional" },
-          { "name": "Assessoria de Tomada de Contas" },
-          { "name": "Unidade Setorial de Controle Interno" },
-          { "name": "Gabinete" }
+          { "NickName": "Assessoria Juridica" },
+          { "NickName": "Assessoria de Gestão de Convênios e Parcelas" },
+          { "NickName": "Assessoria de Planejamento" },
+          { "NickName": "Assessoria de Comunicação Social" },
+          { "NickName": "Assessoria de Integração Constitucional" },
+          { "NickName": "Assessoria de Tomada de Contas" },
+          { "NickName": "Unidade Setorial de Controle Interno" },
+          { "NickName": "Gabinete" }
         ]
       },
 
 
       {
-        "name": "Secretaria de Estado de Turismo",
+        "NickName": "Secretaria de Estado de Turismo",
         "children": [
-          { "name": "Assessoria Juridica" },
-          { "name": "Assessoria de Gestão de Convênios e Parcelas" },
-          { "name": "Assessoria de Planejamento" },
-          { "name": "Assessoria de Comunicação Social" },
-          { "name": "Assessoria de Integração Constitucional" },
-          { "name": "Assessoria de Tomada de Contas" },
-          { "name": "Unidade Setorial de Controle Interno" },
-          { "name": "Gabinete" }
+          { "NickName": "Assessoria Juridica" },
+          { "NickName": "Assessoria de Gestão de Convênios e Parcelas" },
+          { "NickName": "Assessoria de Planejamento" },
+          { "NickName": "Assessoria de Comunicação Social" },
+          { "NickName": "Assessoria de Integração Constitucional" },
+          { "NickName": "Assessoria de Tomada de Contas" },
+          { "NickName": "Unidade Setorial de Controle Interno" },
+          { "NickName": "Gabinete" }
         ]
       },
 
 
       {
-        "name": "Secretaria de Estado de Governo",
+        "NickName": "Secretaria de Estado de Governo",
         "children": [
-          { "name": "Assessoria Juridica" },
-          { "name": "Assessoria de Gestão de Convênios e Parcelas" },
-          { "name": "Assessoria de Planejamento" },
-          { "name": "Assessoria de Comunicação Social" },
-          { "name": "Assessoria de Integração Constitucional" },
-          { "name": "Assessoria de Tomada de Contas" },
-          { "name": "Unidade Setorial de Controle Interno" },
-          { "name": "Gabinete" }
+          { "NickName": "Assessoria Juridica" },
+          { "NickName": "Assessoria de Gestão de Convênios e Parcelas" },
+          { "NickName": "Assessoria de Planejamento" },
+          { "NickName": "Assessoria de Comunicação Social" },
+          { "NickName": "Assessoria de Integração Constitucional" },
+          { "NickName": "Assessoria de Tomada de Contas" },
+          { "NickName": "Unidade Setorial de Controle Interno" },
+          { "NickName": "Gabinete" }
         ]
       },
 
 
       {
-        "name": "Secretária de Estado de Casa Civil e de Relações Institucionais",
+        "NickName": "Secretária de Estado de Casa Civil e de Relações Institucionais",
         "children": [
-          { "name": "Assessoria Juridica" },
-          { "name": "Assessoria de Gestão de Convênios e Parcelas" },
-          { "name": "Assessoria de Planejamento" },
-          { "name": "Assessoria de Comunicação Social" },
-          { "name": "Assessoria de Integração Constitucional" },
-          { "name": "Assessoria de Tomada de Contas" },
-          { "name": "Unidade Setorial de Controle Interno" },
-          { "name": "Gabinete" }
+          { "NickName": "Assessoria Juridica" },
+          { "NickName": "Assessoria de Gestão de Convênios e Parcelas" },
+          { "NickName": "Assessoria de Planejamento" },
+          { "NickName": "Assessoria de Comunicação Social" },
+          { "NickName": "Assessoria de Integração Constitucional" },
+          { "NickName": "Assessoria de Tomada de Contas" },
+          { "NickName": "Unidade Setorial de Controle Interno" },
+          { "NickName": "Gabinete" }
         ]
       },
 
 
       {
-        "name": "Secretaria de Estado de Esportes",
+        "NickName": "Secretaria de Estado de Esportes",
         "children": [
-          { "name": "Assessoria Juridica" },
-          { "name": "Assessoria de Gestão de Convênios e Parcelas" },
-          { "name": "Assessoria de Planejamento" },
-          { "name": "Assessoria de Comunicação Social" },
-          { "name": "Assessoria de Integração Constitucional" },
-          { "name": "Assessoria de Tomada de Contas" },
-          { "name": "Unidade Setorial de Controle Interno" },
-          { "name": "Gabinete" }
+          { "NickName": "Assessoria Juridica" },
+          { "NickName": "Assessoria de Gestão de Convênios e Parcelas" },
+          { "NickName": "Assessoria de Planejamento" },
+          { "NickName": "Assessoria de Comunicação Social" },
+          { "NickName": "Assessoria de Integração Constitucional" },
+          { "NickName": "Assessoria de Tomada de Contas" },
+          { "NickName": "Unidade Setorial de Controle Interno" },
+          { "NickName": "Gabinete" }
         ]
       },
 
 
       {
-        "name": "Secretaria de Estado de Desenvolvimento Agrário (SEDA)",
+        "NickName": "Secretaria de Estado de Desenvolvimento Agrário (SEDA)",
         "children": [
-          { "name": "Assessoria Juridica" },
-          { "name": "Assessoria de Gestão de Convênios e Parcelas" },
-          { "name": "Assessoria de Planejamento" },
-          { "name": "Assessoria de Comunicação Social" },
-          { "name": "Assessoria de Integração Constitucional" },
-          { "name": "Assessoria de Tomada de Contas" },
-          { "name": "Unidade Setorial de Controle Interno" },
-          { "name": "Gabinete" }
+          { "NickName": "Assessoria Juridica" },
+          { "NickName": "Assessoria de Gestão de Convênios e Parcelas" },
+          { "NickName": "Assessoria de Planejamento" },
+          { "NickName": "Assessoria de Comunicação Social" },
+          { "NickName": "Assessoria de Integração Constitucional" },
+          { "NickName": "Assessoria de Tomada de Contas" },
+          { "NickName": "Unidade Setorial de Controle Interno" },
+          { "NickName": "Gabinete" }
         ]
       },
 
 
       {
-        "name": "Secretaria de Estado de Segurança Pública",
+        "NickName": "Secretaria de Estado de Segurança Pública",
         "children": [
-          { "name": "Assessoria Juridica" },
-          { "name": "Assessoria de Gestão de Convênios e Parcelas" },
-          { "name": "Assessoria de Planejamento" },
-          { "name": "Assessoria de Comunicação Social" },
-          { "name": "Assessoria de Integração Constitucional" },
-          { "name": "Assessoria de Tomada de Contas" },
-          { "name": "Unidade Setorial de Controle Interno" },
-          { "name": "Gabinete" }
+          { "NickName": "Assessoria Juridica" },
+          { "NickName": "Assessoria de Gestão de Convênios e Parcelas" },
+          { "NickName": "Assessoria de Planejamento" },
+          { "NickName": "Assessoria de Comunicação Social" },
+          { "NickName": "Assessoria de Integração Constitucional" },
+          { "NickName": "Assessoria de Tomada de Contas" },
+          { "NickName": "Unidade Setorial de Controle Interno" },
+          { "NickName": "Gabinete" }
         ]
       }
     ]
-  };
+  }
+];
 
-// Set the dimensions and margins of the diagram
-var margin = {top: 20, right: 90, bottom: 30, left: 120},
-    width = 4000 - margin.left - margin.right,
-    height = 1500 - margin.top - margin.bottom;
 
-// append the svg object to the body of the page
-// appends a 'group' element to 'svg'
-// moves the 'group' element to the top left margin
-var svg = d3.select("body").append("svg")
-    .attr("width", width + margin.right + margin.left)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform", "translate("
-          + margin.left + "," + margin.top + ")");
+// ************** Generate the tree diagram	 *****************
+var margin = {top: 20, right: 120, bottom: 20, left: 120},
+	width = 4000 - margin.right - margin.left,
+	height = 1700 - margin.top - margin.bottom;
 
 var i = 0,
-    duration = 750,
-    root;
+	duration = 750,
+	root;
 
-// declares a tree layout and assigns the size
-var treemap = d3.tree().size([height, width]);
+var tree = d3.layout.tree()
+	.size([height, width]);
 
-// Assigns parent, children, height, depth
-root = d3.hierarchy(treeData, function(d) { return d.children; });
+var diagonal = d3.svg.diagonal()
+	.projection(function(d) { return [d.y, d.x]; });
+
+var svg = d3.select("body").append("svg")
+	.attr("width", width + margin.right + margin.left)
+	.attr("height", height + margin.top + margin.bottom)
+  .append("g")
+	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+root = treeData[0];
 root.x0 = height / 2;
 root.y0 = 0;
 
-// Collapse after the second level
-root.children.forEach(collapse);
-
 update(root);
 
-// Collapse the node and all it's children
-function collapse(d) {
-  if(d.children) {
-    d._children = d.children
-    d._children.forEach(collapse)
-    d.children = null
-  }
+d3.select(self.frameElement).style("height", "500px");
+
+function wordwrap2(text) {
+   var lines=text.split(" ")
+   return lines
+}
+
+function wordwrap(text, max) {
+  var regex = new RegExp(".{0,"+max+"}(?:\\s|$)","g");
+  var lines = [];
+  var line;
+  while ((line = regex.exec(text))!="") {lines.push(line);}
+  return lines
 }
 
 function update(source) {
 
-  // Assigns the x and y position for the nodes
-  var treeData = treemap(root);
-
   // Compute the new tree layout.
-  var nodes = treeData.descendants(),
-      links = treeData.descendants().slice(1);
+  var nodes = tree.nodes(root).reverse(),
+	  links = tree.links(nodes);
 
   // Normalize for fixed-depth.
-  nodes.forEach(function(d){ d.y = d.depth * 350});
+  nodes.forEach(function(d) { d.y = d.depth * 180; });
 
-  // ****************** Nodes section ***************************
+  // Update the nodes…
+  var node = svg.selectAll("g.node")
+	  .data(nodes, function(d) { return d.id || (d.id = ++i); });
 
-  // Update the nodes...
-  var node = svg.selectAll('g.node')
-      .data(nodes, function(d) {return d.id || (d.id = ++i); });
+  // Enter any new nodes at the parent's previous position.
+  var nodeEnter = node.enter().append("g")
+	  .attr("class", "node")
+	  .attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
+	  .on("click", click);
 
-  // Enter any new modes at the parent's previous position.
-  var nodeEnter = node.enter().append('g')
-      .attr('class', 'node')
-      .attr("transform", function(d) {
-        return "translate(" + source.y0 + "," + source.x0 + ")";
-    })
-    .on('click', click);
+  nodeEnter.append("circle")
+	  .attr("r", 1e-6)
+	  .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
 
-  // Add Circle for the nodes
-  nodeEnter.append('circle')
-      .attr('class', 'node')
-      .attr('r', 1e-6)
-      .style("fill", function(d) {
-          return d._children ? "lightsteelblue" : "#fff";
-      });
+  nodeEnter.append("text")
+	  .attr("x", function(d) { return d.children || d._children ? -13 : 13; })
+	  .attr("dy", ".35em")
+	  .attr("text-anchor", function(d) { return d.children || d._children ? "end" : "start"; })
+	  .style("fill-opacity", 1e-6)
 
-  // Add labels for the nodes
-  nodeEnter.append('text')
-      .attr("dy", ".35em")
-      .attr("x", function(d) {
-          return d.children || d._children ? -13 : 13;
-      })
-      .attr("text-anchor", function(d) {
-          return d.children || d._children ? "end" : "start";
-      })
-      .text(function(d) { return d.data.name; });
+    .text(function(d) { return d.NickName; })
+    .each(function (d) {
+      if (d.NickName!=undefined && d.children!=undefined) {
+        var lines = wordwrap(d.NickName, 20)
+        for (var i = 0; i < lines.length; i++) {
+          d3.select(this).append("tspan")
+          .attr("dy",13)
+          .attr("x",function(d) {
+            return d.children1 || d._children1 ? -10 : 10; })
+            .text(lines[i])
+          }
+      }
+    });
 
-  // UPDATE
-  var nodeUpdate = nodeEnter.merge(node);
+  // Transition nodes to their new position.
+  var nodeUpdate = node.transition()
+	  .duration(duration)
+	  .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
 
-  // Transition to the proper position for the node
-  nodeUpdate.transition()
-    .duration(duration)
-    .attr("transform", function(d) {
-        return "translate(" + d.y + "," + d.x + ")";
-     });
+  nodeUpdate.select("circle")
+	  .attr("r", 10)
+	  .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
 
-  // Update the node attributes and style
-  nodeUpdate.select('circle.node')
-    .attr('r', 10)
-    .style("fill", function(d) {
-        return d._children ? "lightsteelblue" : "#fff";
-    })
-    .attr('cursor', 'pointer');
+  nodeUpdate.select("text")
+	  .style("fill-opacity", 1);
 
-
-  // Remove any exiting nodes
+  // Transition exiting nodes to the parent's new position.
   var nodeExit = node.exit().transition()
-      .duration(duration)
-      .attr("transform", function(d) {
-          return "translate(" + source.y + "," + source.x + ")";
-      })
-      .remove();
+	  .duration(duration)
+	  .attr("transform", function(d) { return "translate(" + source.y + "," + source.x + ")"; })
+	  .remove();
 
-  // On exit reduce the node circles size to 0
-  nodeExit.select('circle')
-    .attr('r', 1e-6);
+  nodeExit.select("circle")
+	  .attr("r", 1e-6);
 
-  // On exit reduce the opacity of text labels
-  nodeExit.select('text')
-    .style('fill-opacity', 1e-6);
+  nodeExit.select("text")
+	  .style("fill-opacity", 1e-6);
 
-  // ****************** links section ***************************
-
-  // Update the links...
-  var link = svg.selectAll('path.link')
-      .data(links, function(d) { return d.id; });
+  // Update the links…
+  var link = svg.selectAll("path.link")
+	  .data(links, function(d) { return d.target.id; });
 
   // Enter any new links at the parent's previous position.
-  var linkEnter = link.enter().insert('path', "g")
-      .attr("class", "link")
-      .attr('d', function(d){
-        var o = {x: source.x0, y: source.y0}
-        return diagonal(o, o)
-      });
+  link.enter().insert("path", "g")
+	  .attr("class", "link")
+	  .attr("d", function(d) {
+		var o = {x: source.x0, y: source.y0};
+		return diagonal({source: o, target: o});
+	  });
 
-  // UPDATE
-  var linkUpdate = linkEnter.merge(link);
+  // Transition links to their new position.
+  link.transition()
+	  .duration(duration)
+	  .attr("d", diagonal);
 
-  // Transition back to the parent element position
-  linkUpdate.transition()
-      .duration(duration)
-      .attr('d', function(d){ return diagonal(d, d.parent) });
+  // Transition exiting nodes to the parent's new position.
+  link.exit().transition()
+	  .duration(duration)
+	  .attr("d", function(d) {
+		var o = {x: source.x, y: source.y};
+		return diagonal({source: o, target: o});
+	  })
+	  .remove();
 
-  // Remove any exiting links
-  var linkExit = link.exit().transition()
-      .duration(duration)
-      .attr('d', function(d) {
-        var o = {x: source.x, y: source.y}
-        return diagonal(o, o)
-      })
-      .remove();
-
-  // Store the old positions for transition.
-  nodes.forEach(function(d){
-    d.x0 = d.x;
-    d.y0 = d.y;
+  // Stash the old positions for transition.
+  nodes.forEach(function(d) {
+	d.x0 = d.x;
+	d.y0 = d.y;
   });
+}
 
-  // Creates a curved (diagonal) path from parent to the child nodes
-  function diagonal(s, d) {
-
-    path = `M ${s.y} ${s.x}
-            C ${(s.y + d.y) / 2} ${s.x},
-              ${(s.y + d.y) / 2} ${d.x},
-              ${d.y} ${d.x}`
-
-    return path
+// Toggle children on click.
+function click(d) {
+  if (d.children) {
+	d._children = d.children;
+	d.children = null;
+  } else {
+	d.children = d._children;
+	d._children = null;
   }
-
-  // Toggle children on click.
-  function click(d) {
-    if (d.children) {
-        d._children = d.children;
-        d.children = null;
-      } else {
-        d.children = d._children;
-        d._children = null;
-      }
-    update(d);
-  }
+  update(d);
 }
 
 </script>
-</body>
+
+  </body>
+</html>
