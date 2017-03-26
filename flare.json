@@ -1,5 +1,6 @@
 {
   "name": "Governo de Minas",
+  "level": "red",
   "children": [
     {
       "name": "Secretaria de Estado de Trabalho e Desenvolvimento Social (SEDESE)",
@@ -15,7 +16,6 @@
 
         {
           "name": "Subsecretaria de Trabalho e Emprego",
-          "tipe": "superint",
           "children": [
             {
               "name": "Superintendência de Gestão e Fomento ao Emprego",
