@@ -1,478 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-
-    <title>Tree Example</title>
-
-    <style>
+<meta charset="utf-8">
+<style type="text/css">
 
 	.node {
-		cursor: pointer;
-	}
+    cursor: pointer;
+  }
 
-	.node circle {
-	  fill: #fff;
-	  stroke: steelblue;
-	  stroke-width: 3px;
-	}
+  .overlay{
+      background-color:#EEE;
+  }
 
-	.node text {
-	  font: 12px sans-serif;
-	}
+  .node circle {
+    fill: #fff;
+    stroke: steelblue;
+    stroke-width: 1.5px;
+  }
 
-	.link {
-	  fill: none;
-	  stroke: #ccc;
-	  stroke-width: 2px;
-	}
+  .node text {
+    font-size:10px;
+    font-family:sans-serif;
+  }
 
-    </style>
+  .link {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 1.5px;
+  }
 
-  </head>
+  .templink {
+    fill: none;
+    stroke: red;
+    stroke-width: 3px;
+  }
 
-  <body>
+  .ghostCircle.show{
+      display:block;
+  }
 
-<!-- load the d3.js library -->
+  .ghostCircle, .activeDrag .ghostCircle{
+       display: none;
+  }
+
+</style>
+<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="http://d3js.org/d3.v3.min.js"></script>
-
-<script>
-
-var treeData = [
-  {
-    "NickName": "Governo de Minas",
-    "parent": "null",
-    "type": "black",
-    "level": "red",
-    "children": [
-      {
-        "NickName": "Secretaria de Estado de Trabalho e Desenvolvimento Social (SEDESE)",
-        "parent": "Governo de Minas",
-        "value": 15,
-        "type": "secretaria",
-        "level": "red",
-        "children": [
-          { "NickName": "Assessoria Juridica" },
-          { "NickName": "Assessoria de Gestão de Convênios e Parcelas" },
-          { "NickName": "Assessoria de Planejamento" },
-          { "NickName": "Assessoria de Comunicação Social" },
-          { "NickName": "Assessoria de Integração Constitucional" },
-          { "NickName": "Assessoria de Tomada de Contas" },
-          { "NickName": "Unidade Setorial de Controle Interno" },
-          { "NickName": "Gabinete" },
-
-          {
-            "NickName": "Subsecretaria de Trabalho e Emprego",
-            "tipe": "superint",
-            "children": [
-              {
-                "NickName": "Superintendência de Gestão e Fomento ao Emprego",
-                "children": [
-                { "NickName": "Diretoria de Desenvolvimento de Políticas para Inclusão de Emprego"},
-                { "NickName": "Diretoria de Atendimento ao Trabalhador"},
-                { "NickName": "Diretoria de Formação Profissional"},
-                { "NickName": "Diretoria de Gestão da Estrutura do Sistema Nacional de Empregos - SINE"}
-                ]
-              },
-              { "NickName": "Assessoria de Relações Institucionais para o Trabalho" },
-              { "NickName": "Assessoria de Articulação Interserorial" },
-              { "NickName": "Assessoria de Gestão do Observatório do Trabalho" },
-
-
-              {
-                "NickName": "Superintendência de Políticas de Empreendedorismo e de Economia Popular Solidária",
-                "children":[
-                { "NickName": "Diretoria de Desenvolvimento e Estruturação da Produção"},
-                { "NickName": "Diretoria de Educação e Apoio à Autogestão dos Empreendimentos"},
-                { "NickName": "Diretoria de Comercialização"},
-                { "NickName": "Diretoria de Apoio à Participação Social"}
-                ]
-              }
-            ]
-          },
-
-          {
-            "NickName": "Superintendência de Programas Especiais",
-            "tipe": "superint",
-            "children": [
-              { "NickName": "Diretoria de Programas para a População de Vilas e Favelas" },
-              { "NickName": "Diretoria de Programas de Enfrentamento da Pobreza no Campo" },
-              { "NickName": "Diretoria de Monitoramento e Avaliação de Programas Especiais" },
-              { "NickName": "Diretoria de Apoio aos Municípios na Promoção do Desenvolvimento Social" }
-            ]
-          },
-
-          {
-            "NickName": "Superintendência de Planejamento Gestão e Finanças",
-            "tipe": "superint",
-            "children": [
-              { "NickName": "Diretoria de Acompanhamento e Prestação de Contas" },
-              { "NickName": "Diretoria de Gestão de Compras e Acompanhamento de Contratos" },
-              { "NickName": "Diretoria de Logística e Manutenção" },
-              { "NickName": "Diretoria de Recursos Humanos" },
-              { "NickName": "Diretoria de Tecnologia da Informação e Comunicação" }
-            ]
-          },
-
-          {
-            "NickName": "Superintendência de Interiorização",
-            "tipe": "superint",
-            "children": [
-              { "NickName": "Diretorias Regionais" },
-              { "NickName": "Diretoria de Coordenação de Políticas Públicas Regionais" }
-            ]
-          },
-
-          {
-            "NickName": "Subsecretaria de Assistencia Social",
-            "children": [
-              { "NickName": "Assessoria de Articulação da Politica de Assistencia Social"},
-              {
-                "NickName": "Superintendencia de Capacitação, Monitoramento, controle e Avaliação de Politicas de Assistência Social",
-                "children": [
-                  { "NickName": "Diretoria de Gestão do Trabalho e Educação Permanente do SUAS"},
-                  { "NickName": "Diretoria de Vigilância Socioassistencial" },
-                  { "NickName": "Diretoria de Regulação do SUAS" }
-                ]
-              },
-              {
-                "NickName": "Superintendência de Proteção Social Especial",
-                "children": [
-                  { "NickName": "Diretoria de Gestão de Medidas Socioeducativas em Meio Aberto"},
-                  { "NickName": "Diretoria de Proteção Social de Média Complexidade " },
-                  { "NickName": "Diretoria de Proteção Social de Alta Complexidade " },
-                  { "NickName": "Diretoria de Articulação com Sistema de Garantia de Direitos e Integração da Rede Socioassistencial" },
-                  { "NickName": "Centro de Refeência Especializados de Assistência Social - CREAS Regionais"}
-                ]
-              },
-              {
-                "NickName": "Superintendencia do Fundo Estaadual de Assistência Social",
-                "children": [
-                  { "NickName": "Diretoria de Gestão do FEAS"},
-                  { "NickName": "Diretoria Análise de contas" }
-                ]
-              },
-              {
-                "NickName": "Superintendencia de Proteção Social Básica e Gestão do Sistema Único de Assistência Social",
-                "children": [
-                  { "NickName": "Diretoria de Gestão do SUAS"},
-                  { "NickName": "Diretoria Credenciamento e Apoio às Entidades Socioassistenciais"},
-                  { "NickName": "Diretoria de Serviços Socioassistenciais"},
-                  { "NickName": "Diretoria de Benefícios e Transferência de Renda"}
-                ]
-              }
-            ]
-          }
-        ]
-      },
-
-
-      {
-        "NickName": "Secretaria de Estado de Agricultura, Pecuária e Abastecimento",
-        "type": "secretaria",
-        "children": [
-          { "NickName": "Assessoria Juridica" },
-          { "NickName": "Assessoria de Gestão de Convênios e Parcelas" },
-          { "NickName": "Assessoria de Planejamento" },
-          { "NickName": "Assessoria de Comunicação Social" },
-          { "NickName": "Assessoria de Integração Constitucional" },
-          { "NickName": "Assessoria de Tomada de Contas" },
-          { "NickName": "Unidade Setorial de Controle Interno" },
-          { "NickName": "Gabinete" }
-        ]
-      },
-
-
-      {
-        "NickName": "Secretaria de Estado de Educação (SEE)",
-        "children": [
-          { "NickName": "Assessoria Juridica" },
-          { "NickName": "Assessoria de Gestão de Convênios e Parcelas" },
-          { "NickName": "Assessoria de Planejamento" },
-          { "NickName": "Assessoria de Comunicação Social" },
-          { "NickName": "Assessoria de Integração Constitucional" },
-          { "NickName": "Assessoria de Tomada de Contas" },
-          { "NickName": "Unidade Setorial de Controle Interno" },
-          { "NickName": "Gabinete" }
-        ]
-      },
-
-
-      {
-        "NickName": "Secretaria de Estado de Direitos Humanos, Participação Social e Cidadania (SEDPAC)",
-        "children": [
-          { "NickName": "Assessoria Juridica" },
-          { "NickName": "Assessoria de Gestão de Convênios e Parcelas" },
-          { "NickName": "Assessoria de Planejamento" },
-          { "NickName": "Assessoria de Comunicação Social" },
-          { "NickName": "Assessoria de Integração Constitucional" },
-          { "NickName": "Assessoria de Tomada de Contas" },
-          { "NickName": "Unidade Setorial de Controle Interno" },
-          { "NickName": "Gabinete" }
-        ]
-      },
-
-
-      {
-        "NickName": "Secretaria de Estado de Turismo",
-        "children": [
-          { "NickName": "Assessoria Juridica" },
-          { "NickName": "Assessoria de Gestão de Convênios e Parcelas" },
-          { "NickName": "Assessoria de Planejamento" },
-          { "NickName": "Assessoria de Comunicação Social" },
-          { "NickName": "Assessoria de Integração Constitucional" },
-          { "NickName": "Assessoria de Tomada de Contas" },
-          { "NickName": "Unidade Setorial de Controle Interno" },
-          { "NickName": "Gabinete" }
-        ]
-      },
-
-
-      {
-        "NickName": "Secretaria de Estado de Governo",
-        "children": [
-          { "NickName": "Assessoria Juridica" },
-          { "NickName": "Assessoria de Gestão de Convênios e Parcelas" },
-          { "NickName": "Assessoria de Planejamento" },
-          { "NickName": "Assessoria de Comunicação Social" },
-          { "NickName": "Assessoria de Integração Constitucional" },
-          { "NickName": "Assessoria de Tomada de Contas" },
-          { "NickName": "Unidade Setorial de Controle Interno" },
-          { "NickName": "Gabinete" }
-        ]
-      },
-
-
-      {
-        "NickName": "Secretária de Estado de Casa Civil e de Relações Institucionais",
-        "children": [
-          { "NickName": "Assessoria Juridica" },
-          { "NickName": "Assessoria de Gestão de Convênios e Parcelas" },
-          { "NickName": "Assessoria de Planejamento" },
-          { "NickName": "Assessoria de Comunicação Social" },
-          { "NickName": "Assessoria de Integração Constitucional" },
-          { "NickName": "Assessoria de Tomada de Contas" },
-          { "NickName": "Unidade Setorial de Controle Interno" },
-          { "NickName": "Gabinete" }
-        ]
-      },
-
-
-      {
-        "NickName": "Secretaria de Estado de Esportes",
-        "children": [
-          { "NickName": "Assessoria Juridica" },
-          { "NickName": "Assessoria de Gestão de Convênios e Parcelas" },
-          { "NickName": "Assessoria de Planejamento" },
-          { "NickName": "Assessoria de Comunicação Social" },
-          { "NickName": "Assessoria de Integração Constitucional" },
-          { "NickName": "Assessoria de Tomada de Contas" },
-          { "NickName": "Unidade Setorial de Controle Interno" },
-          { "NickName": "Gabinete" }
-        ]
-      },
-
-
-      {
-        "NickName": "Secretaria de Estado de Desenvolvimento Agrário (SEDA)",
-        "children": [
-          { "NickName": "Assessoria Juridica" },
-          { "NickName": "Assessoria de Gestão de Convênios e Parcelas" },
-          { "NickName": "Assessoria de Planejamento" },
-          { "NickName": "Assessoria de Comunicação Social" },
-          { "NickName": "Assessoria de Integração Constitucional" },
-          { "NickName": "Assessoria de Tomada de Contas" },
-          { "NickName": "Unidade Setorial de Controle Interno" },
-          { "NickName": "Gabinete" }
-        ]
-      },
-
-
-      {
-        "NickName": "Secretaria de Estado de Segurança Pública",
-        "children": [
-          { "NickName": "Assessoria Juridica" },
-          { "NickName": "Assessoria de Gestão de Convênios e Parcelas" },
-          { "NickName": "Assessoria de Planejamento" },
-          { "NickName": "Assessoria de Comunicação Social" },
-          { "NickName": "Assessoria de Integração Constitucional" },
-          { "NickName": "Assessoria de Tomada de Contas" },
-          { "NickName": "Unidade Setorial de Controle Interno" },
-          { "NickName": "Gabinete" }
-        ]
-      }
-    ]
-  }
-];
-
-
-// ************** Generate the tree diagram	 *****************
-var margin = {top: 20, right: 120, bottom: 20, left: 120},
-	width = 5000 - margin.right - margin.left,
-	height = 5000- margin.top - margin.bottom;
-
-var i = 0,
-	duration = 750,
-	root;
-
-var tree = d3.layout.tree()
-	.size([height, width]);
-
-var diagonal = d3.svg.diagonal()
-	.projection(function(d) { return [d.y, d.x]; });
-
-var svg = d3.select("body").append("svg")
-	.attr("width", width + margin.right + margin.left)
-	.attr("height", height + margin.top + margin.bottom)
-  .append("g")
-	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-root = treeData[0];
-root.x0 = height / 2;
-root.y0 = 0;
-
-update(root);
-
-d3.select(self.frameElement).style("height", "500px");
-
-function wordwrap2(text) {
-   var lines=text.split(" ")
-   return lines
-}
-
-function wordwrap(text, max) {
-  var regex = new RegExp(".{0,"+max+"}(?:\\s|$)","g");
-  var lines = [];
-  var line;
-  while ((line = regex.exec(text))!="") {lines.push(line);}
-  return lines
-}
-
-function update(source) {
-
-  // Compute the new tree layout.
-  var nodes = tree.nodes(root).reverse(),
-	  links = tree.links(nodes);
-
-  // Normalize for fixed-depth.
-  nodes.forEach(function(d) { d.y = d.depth * 600; });
-
-  // Update the nodes…
-  var node = svg.selectAll("g.node")
-	  .data(nodes, function(d) { return d.id || (d.id = ++i); });
-
-  // Enter any new nodes at the parent's previous position.
-  var nodeEnter = node.enter().append("g")
-	  .attr("class", "node")
-	  .attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
-	  .on("click", click);
-
-  nodeEnter.append("circle")
-	  .attr("r", 1e-6)
-	  .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
-
-  nodeEnter.append("text")
-	  .attr("x", function(d) { return d.children || d._children ? -13 : 13; })
-	  .attr("dy", ".35em")
-	  .attr("text-anchor", function(d) { return d.children || d._children ? "end" : "start"; })
-	  .style("fill-opacity", 1e-6)
-
-    //.text(function(d) { return d.NickName; })
-
-
-    .each(function (d) {
-      if (d.children==undefined){
-
-          d3.select(this).append("tspan")
-          .attr("dy",".35em")
-          .attr("x",function(d) {
-            return d.children1 || d._children1 ? -13 : 13; })
-          .text( d.NickName )
-
-      }
-
-      if (d.NickName!=undefined && d.children!=undefined) {
-        var lines = wordwrap(d.NickName, 45)
-        for (var i = 0; i < lines.length; i++) {
-          d3.select(this).append("tspan")
-          .attr("dy", function(d) {
-            return d.children1 || d._children1 ? 0 : 13; } )
-          .attr("x",-20)
-            .text(lines[i])
-          }
-      }
-    });
-
-  // Transition nodes to their new position.
-  var nodeUpdate = node.transition()
-	  .duration(duration)
-	  .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
-
-  nodeUpdate.select("circle")
-	  .attr("r", 10)
-	  .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
-
-  nodeUpdate.select("text")
-	  .style("fill-opacity", 1);
-
-  // Transition exiting nodes to the parent's new position.
-  var nodeExit = node.exit().transition()
-	  .duration(duration)
-	  .attr("transform", function(d) { return "translate(" + source.y + "," + source.x + ")"; })
-	  .remove();
-
-  nodeExit.select("circle")
-	  .attr("r", 1e-6);
-
-  nodeExit.select("text")
-	  .style("fill-opacity", 1e-6);
-
-  // Update the links…
-  var link = svg.selectAll("path.link")
-	  .data(links, function(d) { return d.target.id; });
-
-  // Enter any new links at the parent's previous position.
-  link.enter().insert("path", "g")
-	  .attr("class", "link")
-	  .attr("d", function(d) {
-		var o = {x: source.x0, y: source.y0};
-		return diagonal({source: o, target: o});
-	  });
-
-  // Transition links to their new position.
-  link.transition()
-	  .duration(duration)
-	  .attr("d", diagonal);
-
-  // Transition exiting nodes to the parent's new position.
-  link.exit().transition()
-	  .duration(duration)
-	  .attr("d", function(d) {
-		var o = {x: source.x, y: source.y};
-		return diagonal({source: o, target: o});
-	  })
-	  .remove();
-
-  // Stash the old positions for transition.
-  nodes.forEach(function(d) {
-	d.x0 = d.x;
-	d.y0 = d.y;
-  });
-}
-
-// Toggle children on click.
-function click(d) {
-  if (d.children) {
-	d._children = d.children;
-	d.children = null;
-  } else {
-	d.children = d._children;
-	d._children = null;
-  }
-  update(d);
-}
-
-</script>
-
-  </body>
+<script src="dndTree.js"></script>
+<body>
+    Teste
+    <div id="tree-container"></div>
+    Teste
+</body>
 </html>
