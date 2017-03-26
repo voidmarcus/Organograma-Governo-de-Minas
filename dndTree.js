@@ -413,9 +413,32 @@ treeJSON = d3.json("flare.json", function(error, treeData) {
             .attr("text-anchor", function(d) {
                 return d.children || d._children ? "end" : "start";
             })
-          //  .text(function(d) {
-          //      return d.name;
-          //  })
+  //          .text(function(d) {
+    //            return d.name;
+      //      })
+
+      .each(function (d) {
+        if (d.children==undefined){
+          d3.select(this).append("tspan")
+          .attr("dy",".35em")
+          .attr("x",function(d) {
+            return d.children1 || d._children1 ? -13 : 13; })
+          .text( d.name )
+        }
+
+        if (d.name!=undefined && d.children!=undefined) {
+          var lines = wordwrap(d.name, 45)
+          for (var i = 0; i < lines.length; i++) {
+            d3.select(this).append("tspan")
+
+            .attr("dy", function(d) {
+              return (i < 2) ? (i*13) : 13; })
+
+            .attr("x", -13)
+            .text(lines[i])
+            }
+          }
+        })
             .style("fill-opacity", 0);
 
         // phantom node to give us mouseover in a radius around it
@@ -439,35 +462,7 @@ treeJSON = d3.json("flare.json", function(error, treeData) {
             })
             .attr("text-anchor", function(d) {
                 return d.children || d._children ? "end" : "start";
-            })
-
-
-            .each(function (d) {
-              if (d.children==undefined){
-                d3.select(this).append("tspan")
-                .attr("dy",".35em")
-                .attr("x",function(d) {
-                  return d.children1 || d._children1 ? -13 : 13; })
-                .text( d.name )
-              }
-
-              if (d.name!=undefined && d.children!=undefined) {
-                var lines = wordwrap(d.name, 45)
-                for (var i = 0; i < lines.length; i++) {
-                  d3.select(this).append("tspan")
-
-                  .attr("dy", function(d) {
-                    return (i < 2) ? (i*13) : 13; })
-
-                  .attr("x", -13)
-                  .text(lines[i])
-                  }
-                }
-              })
-
-
-
-;
+            });
 
         // Change the circle fill depending on whether it has children and is collapsed
         node.select("circle.nodeCircle")
