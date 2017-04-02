@@ -13,7 +13,7 @@
   .node circle {
     fill: #fff;
     stroke: steelblue;
-    stroke-width: 2px;
+    stroke-width: 1.5px;
   }
 
   .node text {
@@ -24,7 +24,7 @@
   .link {
     fill: none;
     stroke: #ccc;
-    stroke-width: 3px;
+    stroke-width: 1.5px;
   }
 
   .templink {
@@ -41,13 +41,47 @@
        display: none;
   }
 
+
+}
+
+.found {
+fill: #ff0000;
+stroke: #ff0000;
+}
+
+.search {
+float: left;
+font: 10px sans-serif;
+width: 30%;
+}
+
+ul.select2-results {
+max-height: 100px;
+}
+
+.select2-container,
+.select2-drop,
+.select2-search,
+.select2-search input {
+font: 10px sans-serif;
+}
+
+#block_container {
+display: inline;
+}
+
 </style>
-<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.4.13/d3.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/select2/3.5.2/select2.min.css"></link>
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/select2/3.5.2/select2.min.js"></script>
 <script src="dndTree.js"></script>
 <body>
-    Teste
-    <div id="tree-container"></div>
-    Teste
+
+	<div id="block_container">
+	   <div id="searchName"></div>
+	</div>
+  <div id="tree-container"></div>
+  Teste
 </body>
 </html>

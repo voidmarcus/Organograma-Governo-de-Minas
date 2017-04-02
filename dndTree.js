@@ -1,5 +1,107 @@
+
+
 // Get JSON data
 treeJSON = d3.json("flare.json", function(error, treeData) {
+
+
+  //===============================================
+  function select2DataCollectName(d) {
+      if (d.children)
+          d.children.forEach(select2DataCollectName);
+      else if (d._children)
+          d._children.forEach(select2DataCollectName);
+      select2Data.push(d.name);
+  }
+
+  //===============================================
+  function searchTree(d) {
+      if (d.children)
+          d.children.forEach(searchTree);
+      else if (d._children)
+          d._children.forEach(searchTree);
+      var searchFieldValue = eval(searchField);
+      if (searchFieldValue && searchFieldValue.match(searchText)) {
+              // Walk parent chain
+              var ancestors = [];
+              var parent = d;
+              while (typeof(parent) !== "undefined") {
+                  ancestors.push(parent);
+  		//console.log(parent);
+                  parent.class = "found";
+                  parent = parent.parent;
+              }
+  	    //console.log(ancestors);
+      }
+  }
+
+  //===============================================
+  function clearAll(d) {
+      d.class = "";
+      if (d.children)
+          d.children.forEach(clearAll);
+      else if (d._children)
+          d._children.forEach(clearAll);
+  }
+
+  //===============================================
+  function collapse(d) {
+      if (d.children) {
+          d._children = d.children;
+          d._children.forEach(collapse);
+          d.children = null;
+      }
+  }
+
+  //===============================================
+  function collapseAllNotFound(d) {
+      if (d.children) {
+      	if (d.class !== "found") {
+          	d._children = d.children;
+          	d._children.forEach(collapseAllNotFound);
+          	d.children = null;
+  	} else
+          	d.children.forEach(collapseAllNotFound);
+      }
+  }
+
+  //===============================================
+  function expandAll(d) {
+      if (d._children) {
+          d.children = d._children;
+          d.children.forEach(expandAll);
+          d._children = null;
+      } else if (d.children)
+          d.children.forEach(expandAll);
+  }
+
+  //===============================================
+  // Toggle children on click.
+  function toggle(d) {
+    if (d.children) {
+      d._children = d.children;
+      d.children = null;
+    } else {
+      d.children = d._children;
+      d._children = null;
+    }
+    clearAll(root);
+    update(d);
+    $("#searchName").select2("val", "");
+  }
+
+  //===============================================
+  $("#searchName").on("select2-selecting", function(e) {
+      clearAll(root);
+      expandAll(root);
+      update(root);
+
+      searchField = "d.name";
+      searchText = e.object.text;
+      searchTree(root);
+      root.children.forEach(collapseAllNotFound);
+      update(root);
+  })
+
 
   // Calculate total nodes, max label length
   var totalNodes = 0;
@@ -246,13 +348,15 @@ treeJSON = d3.json("flare.json", function(error, treeData) {
 
   // Helper functions for collapsing and expanding nodes.
 
-  function collapse(d) {
+/*  function collapse(d) {
     if (d.children) {
       d._children = d.children;
       d._children.forEach(collapse);
       d.children = null;
     }
   }
+
+*/
 
   function expand(d) {
     if (d._children) {
@@ -357,6 +461,9 @@ treeJSON = d3.json("flare.json", function(error, treeData) {
     // This prevents the layout looking squashed when new nodes are made visible or looking sparse when nodes are removed
     // This makes the layout more consistent.
     var levelWidth = [1];
+
+
+
     var childCount = function(level, n) {
 
       if (n.children && n.children.length > 0) {
@@ -369,7 +476,7 @@ treeJSON = d3.json("flare.json", function(error, treeData) {
       }
     };
     childCount(0, root);
-    var newHeight = d3.max(levelWidth) * 25; // 25 pixels per line
+    var newHeight = d3.max(levelWidth) * 80; // 80 pixels per line
     tree = tree.size([newHeight, viewerWidth]);
 
     // Compute the new tree layout.
@@ -389,6 +496,45 @@ treeJSON = d3.json("flare.json", function(error, treeData) {
       .data(nodes, function(d) {
         return d.id || (d.id = ++i);
       });
+
+
+
+
+
+
+      var nodeUpdate = node.transition()
+          .duration(duration)
+          .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
+
+      nodeUpdate.select("circle")
+          .attr("r", 4.5)
+          .style("fill", function(d) {
+                if (d.class === "found") {
+                    return "#ff4136"; //red
+                } else if (d._children) {
+                    return "lightsteelblue";
+                } else {
+                    return "#fff";
+                }
+            })
+            .style("stroke", function(d) {
+                if (d.class === "found") {
+                  return "#ff4136"; //red
+                }
+            });
+
+      nodeUpdate.select("text")
+          .style("fill-opacity", 1);
+
+
+
+
+
+
+
+
+
+
 
     // Enter any new nodes at the parent's previous position.
     var nodeEnter = node.enter().append("g")
@@ -430,7 +576,7 @@ treeJSON = d3.json("flare.json", function(error, treeData) {
         }
 
         if (d.name != undefined && d.children != undefined) {
-          var lines = wordwrap(d.name, 45)
+          var lines = wordwrap(d.name, 50)
           for (var i = 0; i < lines.length; i++) {
             d3.select(this).append("tspan")
 
@@ -523,7 +669,12 @@ treeJSON = d3.json("flare.json", function(error, treeData) {
     // Transition links to their new position.
     link.transition()
       .duration(duration)
-      .attr("d", diagonal);
+      .attr("d", diagonal)
+      .style("stroke", function(d) {
+            if (d.target.class === "found") {
+                return "#ff4136";
+            }
+        });
 
     // Transition exiting nodes to the parent's new position.
     link.exit().transition()
@@ -554,8 +705,55 @@ treeJSON = d3.json("flare.json", function(error, treeData) {
   root = treeData;
   root.x0 = viewerHeight / 2;
   root.y0 = 0;
+  update(root);
+
+  select2Data = [];
+  select2DataCollectName(root);
+  select2DataObject = [];
+  select2Data.sort(function(a, b) {
+            if (a > b) return 1; // sort
+            if (a < b) return -1;
+            return 0;
+        })
+        .filter(function(item, i, ar) {
+            return ar.indexOf(item) === i;
+        }) // remove duplicate items
+        .filter(function(item, i, ar) {
+            select2DataObject.push({
+                "id": i,
+                "text": item
+            });
+        });
+    select2Data.sort(function(a, b) {
+            if (a > b) return 1; // sort
+            if (a < b) return -1;
+            return 0;
+        })
+        .filter(function(item, i, ar) {
+            return ar.indexOf(item) === i;
+        }) // remove duplicate items
+        .filter(function(item, i, ar) {
+            select2DataObject.push({
+                "id": i,
+                "text": item
+            });
+        });
+  $("#searchName").select2({
+        data: select2DataObject,
+        containerCssClass: "search"
+  });
+
+
+
+  root.children.forEach(collapse);
+  update(root);
 
   // Layout the tree initially and center on the root node.
-  update(root);
   centerNode(root);
+
+//d3.select(self.frameElement).style("height", "800px");
+
+
+
+
 });
